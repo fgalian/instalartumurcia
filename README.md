@@ -53,8 +53,8 @@ cd instalartumurcia
 2️⃣ **Da permisos y ejecuta el instalador**:
 
 ```bash
-chmod +x instalar-waydroid-kiosk.sh
-sudo ./instalar-waydroid-kiosk.sh
+chmod +x instalar.sh
+sudo ./instalar.sh
 ```
 
 3️⃣ **Reinicia el sistema**:
