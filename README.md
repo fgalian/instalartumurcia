@@ -34,7 +34,8 @@ que ejecutan Android a pantalla completa sin intervención del usuario.
 
 ```
 instalartumurcia/
-├── instalar-waydroid-kiosk.sh     ← Instalador completo del entorno y app TuMurcia
+├── 1_instalar.sh     ← Instalador completo de waydroid
+├── 2_instalarapp.sh  ← Instalador de la app tumurcia
 └── app/
     └── mimurcia-x86_64.apk        ← APK de TuMurcia (instalación automática)
 ```
@@ -53,8 +54,8 @@ cd instalartumurcia
 2️⃣ **Da permisos y ejecuta el instalador**:
 
 ```bash
-chmod +x instalar.sh
-sudo ./instalar.sh
+chmod +x 1_instalar.sh
+sudo ./1_instalar.sh
 ```
 
 3️⃣ **Reinicia el sistema**:

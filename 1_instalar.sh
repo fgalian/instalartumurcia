@@ -2,7 +2,7 @@
 #==============================================================
 # 📦 Proyecto: Instalador modular y autoarranque de Waydroid
 # 👤 Autor: Fran Galian — Ayuntamiento de Murcia
-# 🏷️ Versión: 0.0.2 (release 20251028)
+# 🏷️ Versión: 0.0.3 (release 20251028)
 # 📅 Fecha de publicación: 28 de octubre de 2025
 # 📝 Descripción:
 #      Instalación 100 % funcional de Waydroid en un entorno
@@ -15,20 +15,10 @@ set -e
 
 USUARIO="ayto"
 APK_PATH="./app/mimurcia-x86_64.apk"
-APK_PACKAGE="es.aytomurcia.tumurcia"  # ⚠️ Cambiar si tu paquete es otro
 
 echo "🧱 Instalando dependencias básicas..."
 apt update -y
-apt install -y \
-  cage \
-  seatd \
-  mesa-utils \
-  libgl1-mesa-dri \
-  xdg-desktop-portal-wlr \
-  dbus-user-session \
-  systemd-resolved \
-  udev \
-  wget curl ca-certificates
+apt install -y cage seatd mesa-utils libgl1-mesa-dri xdg-desktop-portal-wlr dbus-user-session systemd-resolved udev wget curl ca-certificates
 
 echo "🔌 Habilitando y arrancando seatd..."
 systemctl enable --now seatd
@@ -55,7 +45,6 @@ Type=simple
 EOF
 
 systemctl daemon-reload
-systemctl restart getty@tty1
 
 echo "🧩 Creando script de inicio automático para Waydroid..."
 sudo -u ayto bash -c 'cat > ~/.bash_profile <<EOF
@@ -80,7 +69,6 @@ fi
 EOF
 chmod +x ~/.bash_profile
 '
-
 
 chmod +x /home/$USUARIO/.bash_profile
 chown $USUARIO:$USUARIO /home/$USUARIO/.bash_profile
