@@ -2,8 +2,8 @@
 #==============================================================
 # 📦 Proyecto: Instalador modular y autoarranque de Waydroid
 # 👤 Autor: Fran Galian — Ayuntamiento de Murcia
-# 🏷️ Versión: 0.0.3 (release 20251028)
-# 📅 Fecha de publicación: 28 de octubre de 2025
+# 🏷️ Versión: 0.0.4 (release 20251028)
+# 📅 Fecha de publicación: 29 de octubre de 2025
 # 📝 Descripción:
 #      Instalación 100 % funcional de Waydroid en un entorno
 #      Ubuntu Server Minimal (sin escritorio).
@@ -30,6 +30,31 @@ if ! waydroid status 2>/dev/null | grep -q "RUNNING"; then
   echo "❌ Waydroid no está activo. Abortando instalación de APK."
   exit 1
 fi
+
+# Idioma y país
+sudo waydroid shell settings put system system_locales es-ES
+sudo waydroid shell settings put system system_language es
+sudo waydroid shell settings put system system_country ES
+
+# Tema oscuro
+sudo waydroid shell settings put secure ui_night_mode 0   # 0=claro, 2=oscuro
+
+# Girar pantalla
+sudo waydroid shell settings put system accelerometer_rotation 1
+sudo waydroid shell settings put system user_rotation 1
+
+
+# Layout teclado
+sudo waydroid shell settings put secure default_input_method com.android.inputmethod.latin/.LatinIME
+sudo waydroid shell ime enable com.android.inputmethod.latin/.LatinIME
+
+# Confirmar cambios
+echo "✅ Configuración aplicada:"
+sudo waydroid shell settings get system system_locales
+sudo waydroid shell settings get secure ui_night_mode
+
+echo "📱 Sistema Android configurado correctamente (idioma: español, tema claro)."
+
 
 # Instalar APK si no está instalada
 if [ -f "$APK_PATH" ]; then

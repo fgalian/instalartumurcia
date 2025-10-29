@@ -2,8 +2,8 @@
 #==============================================================
 # 📦 Proyecto: Instalador modular y autoarranque de Waydroid
 # 👤 Autor: Fran Galian — Ayuntamiento de Murcia
-# 🏷️ Versión: 0.0.3 (release 20251028)
-# 📅 Fecha de publicación: 28 de octubre de 2025
+# 🏷️ Versión: 0.0.4 (release 20251028)
+# 📅 Fecha de publicación: 29 de octubre de 2025
 # 📝 Descripción:
 #      Instalación 100 % funcional de Waydroid en un entorno
 #      Ubuntu Server Minimal (sin escritorio).
@@ -47,28 +47,40 @@ EOF
 systemctl daemon-reload
 
 echo "🧩 Creando script de inicio automático para Waydroid..."
-sudo -u ayto bash -c 'cat > ~/.bash_profile <<EOF
+sudo -u $USUARIO bash -c "cat > ~/.bash_profile <<'EOF'
 #!/bin/bash
 # 🟢 Arranque automático Waydroid (modo tótem) en Ubuntu Server Minimal
 
-if [[ "\$(tty)" == "/dev/tty1" ]]; then
-  echo "🟢 Iniciando entorno gráfico (Cage + Waydroid)..."
+if [[ \"\$(tty)\" == \"/dev/tty1\" ]]; then
+  echo \"🟢 Iniciando entorno gráfico (Cage + Waydroid)...\"
 
-  # Esperar hasta que el contenedor de Waydroid esté activo
+  # Esperar hasta que el contenedor esté activo
   for i in {1..30}; do
     if systemctl is-active --quiet waydroid-container; then
       break
     fi
-    echo "⏳ Esperando contenedor Waydroid..."
+    echo \"⏳ Esperando contenedor Waydroid...\"
     sleep 2
   done
 
-  # Lanzar Android en modo fullscreen
-  exec cage -s -- waydroid show-full-ui
+  # Lanzar Android en pantalla completa y abrir la app TuMurcia automáticamente
+  exec cage -s -- bash -c '
+    waydroid show-full-ui &
+    echo \"🚀 Iniciando Android...\"
+    for i in {1..30}; do
+      if waydroid shell getprop sys.boot_completed | grep -q \"1\"; then
+        break
+      fi
+      sleep 2
+    done
+    echo \"📲 Lanzando aplicación TuMurcia...\"
+    waydroid app launch es.aytomurcia.tumurcia
+  '
 fi
 EOF
 chmod +x ~/.bash_profile
-'
+"
+
 
 chmod +x /home/$USUARIO/.bash_profile
 chown $USUARIO:$USUARIO /home/$USUARIO/.bash_profile
